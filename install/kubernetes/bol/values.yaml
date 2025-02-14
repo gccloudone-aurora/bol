@@ -1,0 +1,53 @@
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  repository: ""
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+config:
+  # maximumReportingWindowInDays: 30
+  # fileNameSuffix: ""
+  # artifactRepository:
+  #   provider: azure
+  #   azure:
+  #     storageAccountName: <storage-account-name>
+  #     storageAccountContainerName: <container-name>
+  #     useAzureCliCredentials: false
+  # clusters:
+  #   - name: <cluster-name>
+  #     subscription: <subscription-id>
+  #     kubecostURL: <kubecost-url>
+  #     KubecostURlAttachAzurebearerToken: false
+  #     kubernetesAuth:
+  #       method: manual
+  #       manual:
+  #         host: <cluster-host
+  #         bearerToken:
+  #         tlsClientConfig:
+  #           insecure: true
+  #           caData: <ca-data>
+
+
+serviceAccount:
+  # This might be useful if config.clusters.kubernetesAuth.method is set to "incluster"
+  # If true, a service account will be created a used for the pod.
+  # The nessessary role and rolebinding will also be created.
+  create: false
+  # Automatically mount a ServiceAccount's API credentials?
+  automount: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+aadPodIdentity:
+  azureManagedIdentity:
+    clientId: ""
+    resourceId: ""
+
+nodeSelector: {}
+tolerations: []

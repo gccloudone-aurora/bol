@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "bol.fullname" . }}
+  labels:
+    {{- include "bol.labels" . | nindent 4 }}
+spec:
+  schedule: "0 0 * * *"
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 5
+  successfulJobsHistoryLimit: 5
+  jobTemplate:
+    spec:
+      backoffLimit: 5
+      template:
+        metadata:
+          labels:
+            aadpodidbinding: {{ include "bol.fullname" . }}
+            {{- include "bol.labels" . | nindent 12 }}
+        spec:
+          volumes:
+            - name: {{ include "bol.fullname" . }}-config
+              secret:
+                secretName: bill-of-landing-config
+                defaultMode: 420
+          containers:
+            - name: bill-of-landing
+              image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+              args:
+              - generate
+              volumeMounts:
+                - name: {{ include "bol.fullname" . }}-config
+                  readOnly: true
+                  mountPath: /etc/bol/config
+                  subPath: config.yaml
+          restartPolicy: OnFailure
+          nodeSelector: {{  toYaml .Values.nodeSelector | nindent 12 }}
+          tolerations: {{ toYaml .Values.tolerations | nindent 12 }}
+          serviceAccountName: {{ include "bol.serviceAccountName" . }}

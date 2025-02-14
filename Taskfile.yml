@@ -1,0 +1,101 @@
+version: "3"
+dotenv: ['.env']
+output: prefixed
+silent: true
+
+vars:
+  DEFAULT_GO_PACKAGES:
+    sh: |
+      echo $(cd {{default "./" .GO_MODULE_PATH}} && go list ./... | tr '\n' ' ' || echo '"ERROR: Unable to discover Go package(s)"')
+
+tasks:
+  default:
+    prefix: ⚙️
+    cmds:
+    - task -l
+    silent: true
+
+  hello:
+    cmds:
+      - echo 'Hello World from Task!'
+    silent: true
+
+  check:
+    desc: Check for problems associated with the project
+    deps:
+      - task: go:lint
+      - task: go:vet
+      - task: go:test
+
+  format:
+    desc: Format all files
+    deps:
+      - task: go:format
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/go-task/Taskfile.yml
+  go:build:
+    desc: Build the Go code
+    cmds:
+      - go build -v {{.LDFLAGS}}
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-go-task/Taskfile.yml
+  go:fix:
+    desc: Modernize usages of outdated APIs
+    dir: '{{default "./" .GO_MODULE_PATH}}'
+    cmds:
+      - go fix {{default .DEFAULT_GO_PACKAGES .GO_PACKAGES}}
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-go-task/Taskfile.yml
+  go:format:
+    desc: Format Go code
+    dir: '{{default "./" .GO_MODULE_PATH}}'
+    cmds:
+      - go fmt {{default .DEFAULT_GO_PACKAGES .GO_PACKAGES}}
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-go-task/Taskfile.yml
+  go:lint:
+    desc: Lint go code by pointing out common style mistakes
+    dir: '{{default "./" .GO_MODULE_PATH}}'
+    cmds:
+      - |
+        if ! which golint &>/dev/null; then
+          echo "golint not installed or not in PATH. Please install: https://github.com/golang/lint#installation"
+          exit 1
+        fi
+      - |
+        golint \
+          {{default "-min_confidence 0.8 -set_exit_status" .GO_LINT_FLAGS}} \
+          {{default .DEFAULT_GO_PACKAGES .GO_PACKAGES}}
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-go-task/Taskfile.yml
+  go:staticcheck:
+    desc: Staticcheck is a state of the art linter for the Go programming language
+    dir: '{{default "./" .GO_MODULE_PATH}}'
+    cmds:
+      - |
+        if ! which staticcheck &>/dev/null; then
+          echo "staticcheck not installed or not in PATH. Please install: https://staticcheck.io/docs/getting-started/#installation"
+          exit 1
+        fi
+      - staticcheck ./...
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/check-go-task/Taskfile.yml
+  go:vet:
+    desc: Check for errors in Go code
+    dir: '{{default "./" .GO_MODULE_PATH}}'
+    cmds:
+      - go vet {{default .DEFAULT_GO_PACKAGES .GO_PACKAGES}}
+
+  # Source: https://github.com/arduino/tooling-project-assets/blob/main/workflow-templates/assets/test-go-task/Taskfile.yml
+  go:test:
+    desc: Run unit tests
+    dir: '{{default "./" .GO_MODULE_PATH}}'
+    cmds:
+      - |
+        go test \
+          -v \
+          -short \
+          -run '{{default ".*" .GO_TEST_REGEX}}' \
+          {{default "-timeout 10m -coverpkg=./... -covermode=atomic" .GO_TEST_FLAGS}} \
+          -coverprofile=coverage_unit.txt \
+          {{default .DEFAULT_GO_PACKAGES .GO_PACKAGES}}

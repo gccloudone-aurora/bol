@@ -1,0 +1,19 @@
+artifactRepository:
+  provider: azure
+  azure:
+    storageAccountName: <storage-account-name>
+    storageAccountContainerName: <container-name>
+    useAzureCliCredentials: true
+
+clusters:
+  - name: <cluster-name>
+    subscription: <subscription-id>
+    kubecostURL: <kubecost-url>
+    kubernetesAuth:
+      method: manual
+      manual:
+        host: <cluster-host
+        bearerToken:
+        tlsClientConfig:
+          insecure: true
+          caData: <ca-data>

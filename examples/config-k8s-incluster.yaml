@@ -1,0 +1,13 @@
+artifactRepository:
+  provider: azure
+  azure:
+    storageAccountName: <storage-account-name>
+    storageAccountContainerName: <container-name>
+    useAzureCliCredentials: true
+
+clusters:
+  - name: aurora-dev-cc-00-aks
+    subscription: aurora-nonprod
+    kubecostURL: https://kubecost.aurora-dev-cc-00.cloud.aurora.ca/
+    kubernetesAuth:
+      method: incluster

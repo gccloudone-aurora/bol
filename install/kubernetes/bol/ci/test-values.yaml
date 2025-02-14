@@ -1,0 +1,36 @@
+fullnameOverride: "bill-of-landing"
+
+image:
+  repository: aurora-docker-local
+  pullPolicy: IfNotPresent
+
+config:
+  artifactRepository:
+    provider: azure
+    azure:
+      storageAccountName: <storage-account-name>
+      storageAccountContainerName: <container-name>
+      useAzureCliCredentials: false
+  clusters:
+    - name: <cluster-name>
+      subscription: <subscription-id>
+      kubecostURL: <kubecost-url>
+      kubernetesAuth:
+        method: manual
+        manual:
+          host: <cluster-host
+          bearerToken:
+          tlsClientConfig:
+            insecure: true
+            caData: <ca-data>
+
+serviceAccount:
+  create: true
+
+aadPodIdentity:
+  azureManagedIdentity:
+    clientId: "client-id"
+    resourceId: "resource-id"
+
+nodeSelector: {}
+tolerations: []

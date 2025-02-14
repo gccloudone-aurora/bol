@@ -1,0 +1,20 @@
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentity
+metadata:
+  name: {{ include "bol.fullname" . }}
+  labels: {{ include "bol.labels" . | nindent 4 }}
+  annotations:
+    aadpodidentity.k8s.io/Behavior: "namespaced"
+spec:
+  clientID: {{ required "aadPodIdentity.azureManagedIdentity.clientId is required" .Values.aadPodIdentity.azureManagedIdentity.clientId | quote }}
+  resourceID: {{ required "aadPodIdentity.azureManagedIdentity.resourceId is required" .Values.aadPodIdentity.azureManagedIdentity.resourceId | quote }}
+  type: 0
+---
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentityBinding
+metadata:
+  name: {{ include "bol.fullname" . }}
+  labels: {{ include "bol.labels" . | nindent 4 }}
+spec:
+  azureIdentity: {{ include "bol.fullname" . }}
+  selector: {{ include "bol.fullname" . }}
