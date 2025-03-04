@@ -1,5 +1,5 @@
 # Build with the golang image
-FROM artifactory.ssc-spc.gc.ca/docker-remote/golang:1.22.3-alpine AS build
+FROM golang:1.22.3-alpine AS build
 
 # Add git
 RUN apk --no-cache add git
