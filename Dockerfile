@@ -1,8 +1,8 @@
 # Build with the golang image
-FROM golang:1.22.3-alpine AS build
+FROM golang:1.26-alpine AS build
 
 # Add git
-RUN apk --no-cache add git
+RUN apk add --no-cache git
 
 # Set workdir
 WORKDIR /work
