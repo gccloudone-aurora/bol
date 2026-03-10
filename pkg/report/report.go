@@ -113,7 +113,7 @@ func (r *ReportGenerator) Generate(ctx context.Context) {
 
 		reportName := fmt.Sprintf("kubecost_%s%s.csv", date.Format("2006-01-02"), r.FileNameSuffix)
 		if err := r.Storage.UploadArtifact(ctx, reportName, pipeReader); err != nil {
-			log.Fatalf("Error uploading report: %w \n", err)
+			log.Fatalf("Error uploading report: %s", err)
 		}
 		log.Printf("Report %s uploaded successfully!\n\n", reportName)
 	}
