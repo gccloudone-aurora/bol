@@ -70,7 +70,7 @@ func (a *AzureStorage) UploadArtifact(ctx context.Context, fileName string, data
 	}
 
 	if _, err := blobClient.UploadStream(ctx, data, azblob.UploadStreamOptions{}); err != nil {
-		return fmt.Errorf("UploadArtifact: failed to upload stream to the %s container within the %s Azure Storage Account: %w", err)
+		return fmt.Errorf("UploadArtifact: failed to upload stream to the %s container within the %s Azure Storage Account: %w", a.Container, a.Name, err)
 	}
 
 	return nil
