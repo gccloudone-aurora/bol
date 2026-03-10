@@ -23,7 +23,7 @@ func CreateClientset(configAuth util.KubernetesAuth) (*k8s.Clientset, error) {
 	case "kubeconfigPath":
 		config, err = clientcmd.BuildConfigFromFlags("", configAuth.KubeconfigPath)
 		if err != nil {
-			return nil, fmt.Errorf("failed %s building Kubernetes config from flags: %v", err)
+			return nil, fmt.Errorf("failed building Kubernetes config from flags: %v", err)
 		}
 		log.Println("CreateClientset: Using kubeconfig Kubernetes configuration")
 	case "incluster":

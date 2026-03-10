@@ -28,5 +28,5 @@ func NewStorage(config util.ArtifactRepository) (Storage, error) {
 		return azureStorage, nil
 	}
 
-	return nil, fmt.Errorf("Unsupported storage provider: %w", config.Provider)
+	return nil, fmt.Errorf("Unsupported storage provider: %s", config.Provider)
 }
