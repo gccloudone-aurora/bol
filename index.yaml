@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  bol:
+  - apiVersion: v2
+    appVersion: 0.0.11
+    created: "2026-07-29T02:18:26.223280551Z"
+    description: A Helm chart for Kubernetes
+    digest: d64e3e7ec8686779dc384ef1ed9ee040c3eab6bb91990620f20f9509f430b121
+    name: bol
+    type: application
+    urls:
+    - https://github.com/gccloudone-aurora/bol/releases/download/bol-0.0.1/bol-0.0.1.tgz
+    version: 0.0.1
+generated: "2026-07-29T02:18:26.223287544Z"
